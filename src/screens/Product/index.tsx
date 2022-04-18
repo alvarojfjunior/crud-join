@@ -1,5 +1,5 @@
-import { ScrollView } from "react-native";
-import { ActivityIndicator, DataTable, FAB, Modal, Portal, Text, Title } from "react-native-paper";
+import { Alert, ScrollView } from "react-native";
+import { ActivityIndicator, DataTable, FAB, IconButton, Modal, Portal, Text, Title } from "react-native-paper";
 
 import { useStyle } from "_hooks/utils";
 
@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 import { Product as ProductType } from "_types";
 
-import { fetchTypeSaveSql } from '../../services/database'
+import { executeQuery } from '../../services/database'
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Product = () => {
@@ -30,8 +30,13 @@ const Product = () => {
 
 
     const getAll = async () => {
-        const res2 = await fetchTypeSaveSql('select * from product order by id desc', undefined)
-        setProducts(res2.rows._array)
+        try {
+            const res2 = await executeQuery('select * from product order by id desc', undefined)
+            setProducts(res2.rows._array)
+        } catch (error) {
+            Alert.alert('Erro', 'Houve um erro, tente mais tarde.')
+        }
+        
         setIsReady(true)
     }
 
@@ -44,6 +49,19 @@ const Product = () => {
         setIsModalVisible(true)
     }
 
+    const onDelete = async productId => {
+        setIsReady(false)
+        try {
+            await executeQuery(`DELETE FROM product WHERE id = ${productId}`, undefined)
+            await getAll()
+        } catch (error) {
+            Alert.alert('Erro', 'Houve um erro, tente mais tarde.')
+        }
+
+        setIsReady(true)
+    }
+
+
     return (
         !isReady
             ? <ActivityIndicator style={styles.spenner} size="large" />
@@ -54,6 +72,7 @@ const Product = () => {
                     <DataTable.Title>Descrição</DataTable.Title>
                     <DataTable.Title>Preço</DataTable.Title>
                     <DataTable.Title>Categoria</DataTable.Title>
+                    <DataTable.Title>Ações</DataTable.Title>
                 </DataTable.Header>
                 <ScrollView>
                     {products?.map(product =>
@@ -62,6 +81,7 @@ const Product = () => {
                             <DataTable.Cell> {product.description} </DataTable.Cell>
                             <DataTable.Cell> {product.price} </DataTable.Cell>
                             <DataTable.Cell> {product.category} </DataTable.Cell>
+                            <DataTable.Cell> <IconButton icon="delete" onPress={() => onDelete(product.id)} /> </DataTable.Cell>
                         </DataTable.Row>
                     )}
                 </ScrollView>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Alert } from "react-native";
-import { Button, Text, TextInput, Title } from "react-native-paper";
+import { Button, TextInput, Title } from "react-native-paper";
 
 import { useStyle } from "_hooks/utils";
 

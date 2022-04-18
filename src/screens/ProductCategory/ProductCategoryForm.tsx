@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 
 import { useStyle } from "_hooks/utils";
 
 import createStyle from "./style";
 
-import { fetchTypeSaveSql } from '../../services/database'
+import { executeQuery } from '../../services/database'
 
 const CategoryCategory = ({ setIsModalVisible, selectedCategory, setSelectedCategory }) => {
     const styles = useStyle(createStyle);
@@ -21,11 +21,19 @@ const CategoryCategory = ({ setIsModalVisible, selectedCategory, setSelectedCate
     }, [])
 
     const onRegister = async () => {
+        if (!name) {
+            Alert.alert('Preencha os campos obrigatórios', 'A descrição é obrigatória')
+            return
+        }
         let res: Object
-        if (!selectedCategory) {
-            res = await fetchTypeSaveSql(`INSERT INTO category (name) VALUES('${name}')`, undefined)
-        } else {
-            res = await fetchTypeSaveSql(`UPDATE category SET name='${name}' WHERE id = ${selectedCategory.id}`, undefined)
+        try {
+            if (!selectedCategory) {
+                res = await executeQuery(`INSERT INTO category (name) VALUES('${name}')`, undefined)
+            } else {
+                res = await executeQuery(`UPDATE category SET name='${name}' WHERE id = ${selectedCategory.id}`, undefined)
+            }
+        } catch (error) {
+            Alert.alert('Erro', 'Houve um erro, tente mais tarde.')
         }
         setSelectedCategory(undefined)
         setIsModalVisible(false)
@@ -36,7 +44,7 @@ const CategoryCategory = ({ setIsModalVisible, selectedCategory, setSelectedCate
         setSelectedCategory(undefined)
     }
 
-    
+
     return (
         <View style={styles.screen}>
             <Title style={styles.modalTitle}> Categoria de Produtos </Title>

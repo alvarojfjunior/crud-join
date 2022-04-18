@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 
 import { Picker } from '@react-native-picker/picker';
 
@@ -9,7 +9,7 @@ import { useStyle } from "_hooks/utils";
 
 import createStyle from "./style";
 
-import { fetchTypeSaveSql } from '../../services/database'
+import { executeQuery } from '../../services/database'
 
 const ProductCategory = ({ setIsModalVisible, selectedProduct, setSelectedProduct }: any) => {
     const styles = useStyle(createStyle);
@@ -30,18 +30,38 @@ const ProductCategory = ({ setIsModalVisible, selectedProduct, setSelectedProduc
 
 
     const getAllCategories = async () => {
-        const res1 = await fetchTypeSaveSql(`INSERT INTO category (name) VALUES ('Teste')`, undefined)
-        const res2 = await fetchTypeSaveSql('select * from category', undefined)
-        const options = res2.rows._array.map(value => { return { value: value.id, label: value.name } })
-        setCategoriesOptions(options)
+        try {
+            const res2 = await executeQuery('select * from category', undefined)
+            const options = res2.rows._array.map(value => { return { value: value.id, label: value.name } })
+            setCategoriesOptions(options)
+        } catch (error) {
+            Alert.alert('Erro', 'Houve um erro, tente mais tarde.')
+        }
     }
 
     const onRegister = async () => {
+
+        if (!description) {
+            Alert.alert('Preencha os campos obrigatórios', 'A descrição é obrigatória')
+            return
+        } else if (!price) {
+            Alert.alert('Preencha os campos obrigatórios', 'O preço é obrigatório')
+            return
+        } else if (!category) {
+            Alert.alert('Preencha os campos obrigatórios', 'A categoria de produtos é obrigatória')
+            return
+        }
+
         let res: Object
-        if (!selectedProduct) {
-            res = await fetchTypeSaveSql(`INSERT INTO product (description,price,category) VALUES('${description}','${price}', ${category})`, undefined)
-        } else {
-            res = await fetchTypeSaveSql(`UPDATE product SET description='${description}', price='${price}', category=${category} WHERE id = ${selectedProduct.id}`, undefined)
+
+        try {
+            if (!selectedProduct) {
+                res = await executeQuery(`INSERT INTO product (description,price,category) VALUES('${description}','${price}', ${category})`, undefined)
+            } else {
+                res = await executeQuery(`UPDATE product SET description='${description}', price='${price}', category=${category} WHERE id = ${selectedProduct.id}`, undefined)
+            }
+        } catch (error) {
+            Alert.alert('Erro', 'Houve um erro, tente mais tarde.')
         }
 
         setSelectedProduct(undefined)
@@ -77,7 +97,7 @@ const ProductCategory = ({ setIsModalVisible, selectedProduct, setSelectedProduc
             </Picker>
 
             <View style={styles.bottonsContainer}>
-            <Button
+                <Button
                     style={styles.buttonCancel}
                     icon="check_circle"
                     mode="contained"

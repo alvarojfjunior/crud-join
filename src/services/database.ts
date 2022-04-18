@@ -2,7 +2,7 @@ import { DatabaseConnection } from '../database/connection';
 
 var db = DatabaseConnection.getConnection();
 
-export const fetchTypeSaveSql = async <T>(sqlStatement: string, args: any[] | undefined): Promise<T> => {
+export const executeQuery = async <T>(sqlStatement: string, args: any[] | undefined): Promise<T> => {
     return new Promise((resolve) => {
         db.transaction(tx => {
             tx.executeSql(
