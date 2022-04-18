@@ -73,7 +73,7 @@ const ProductCategory = ({ setIsModalVisible, selectedProduct, setSelectedProduc
                 style={styles.picker}
                 selectedValue={category}
                 onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}>
-                {categoriesOptions.map(cat => <Picker.Item label={cat.label} value={cat.value} />)}
+                {categoriesOptions.map((cat, i) => <Picker.Item key={i} label={cat.label} value={cat.value} />)}
             </Picker>
 
             <View style={styles.bottonsContainer}>
