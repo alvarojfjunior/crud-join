@@ -12,7 +12,9 @@
             "_utils/*": ["utils/*"],
             "_hooks/utils": ["hooks/utils"],
             "_hooks/utils/*": ["hooks/utils/*"],
-            "_types": ["../types.tsx"]
+            "_types": ["../types.tsx"],
+            "_services": ["services"],
+            "_database": ["database"]
         }
     }
 }

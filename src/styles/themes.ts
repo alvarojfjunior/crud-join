@@ -1,5 +1,4 @@
-import { DefaultTheme, configureFonts } from "react-native-paper";
-import { Fonts } from "react-native-paper/lib/typescript/types";
+import { DefaultTheme, DarkTheme } from "react-native-paper";
 import Colors from "./colors";
 import * as Typography from "./typography";
 
@@ -40,6 +39,20 @@ export const light = {
     fonts,
 };
 
+export const dark = {
+    ...DarkTheme,
+
+    mode: "adaptive",
+    scheme: "dark",
+
+    roundness: 4,
+    colors: {
+        ...DarkTheme.colors,
+        ...Colors.dark,
+    },
+    fonts,
+};
+
 export type Theme = typeof light;
 
-export default { light };
+export default { light, dark };

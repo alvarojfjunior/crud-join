@@ -1,9 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { RootStackParamList } from "_types";
-
-import HomeScreen from "_screens/home";
+import Login from "_screens/Login";
+import BottomBar from "_screens/BottomBar";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,14 +11,17 @@ const RootNavigator = () => {
         headerShown: false,
         detachPreviousScreen: false,
     };
-    ``;
 
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="NotFound"
-                component={HomeScreen}
-                options={{ title: "Oops!" }}
+                name="Login"
+                component={Login}
+                options={{ title: "Login!" }}
+            />
+            <Stack.Screen
+                name="BottomBar"
+                component={BottomBar}
             />
         </Stack.Navigator>
     );

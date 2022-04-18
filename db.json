@@ -1,0 +1,16 @@
+{
+    "products" : [
+        {
+            "id": 1,
+            "description": "Motor x",
+            "price": "10,50",
+            "category": 1
+        }
+    ],
+    "productCategory": [
+        {
+            "id": 1,
+            "name": "Motor"
+        }
+    ]
+}

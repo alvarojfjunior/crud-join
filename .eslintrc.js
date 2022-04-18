@@ -15,6 +15,8 @@ module.exports = {
                     _utils: "./src/utils",
                     _hooks: "./src/hooks",
                     _types: "./types.tsx",
+                    _services: "./src/services",
+                    _database: "./src/database",
                 },
             },
         },

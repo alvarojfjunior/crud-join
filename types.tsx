@@ -8,7 +8,7 @@ import { Theme } from "_styles/themes";
 
 declare global {
     namespace ReactNavigation {
-        interface RootParamList extends RootStackParamList {}
+        interface RootParamList extends RootStackParamList { }
     }
 }
 
@@ -17,6 +17,23 @@ export type RootStackParamList = {
         theme: Theme;
     };
 };
+
+export type Product = {
+    id: Number,
+    description: String,
+    price: Number,
+    category: Number
+}
+
+export type ProductCategory = {
+    id: Number,
+    name: String
+}
+
+
+
+
+export type DbData = { product:Product[], productCategory:ProductCategory[] }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
     NativeStackScreenProps<RootStackParamList, Screen>;
